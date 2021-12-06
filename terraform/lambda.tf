@@ -4,6 +4,7 @@ resource "aws_lambda_function" "new_order_processor" {
   role          = aws_iam_role.lambda_new_order_processor_role.arn
   handler       = "src/index.handler"
   runtime       = "nodejs14.x"
+  timeout       = 20
 
   source_code_hash = filebase64sha256("new-order-processor.zip")
 
@@ -21,6 +22,7 @@ resource "aws_lambda_function" "pdf_generator" {
   role          = aws_iam_role.lambda_pdf_generator_role.arn
   handler       = "src/index.handler"
   runtime       = "nodejs14.x"
+  timeout       = 20
 
   source_code_hash = filebase64sha256("pdf-generator.zip")
 
