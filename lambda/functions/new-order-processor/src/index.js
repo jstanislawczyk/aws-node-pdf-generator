@@ -1,4 +1,5 @@
 const orderService = require('./services/order.service');
+const dynamodbService = require('./services/dynamodb.service');
 const snsService = require('./services/sns.service');
 
 exports.handler = async function(event) {
@@ -20,5 +21,6 @@ exports.handler = async function(event) {
     };
 
     const enrichedOrderData = orderService.enrichOrder(orderData);
+    await dynamodbService.saveOrder(enrichedOrderData);
     await snsService.publishNotification(enrichedOrderData);
 };

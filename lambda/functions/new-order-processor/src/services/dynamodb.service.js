@@ -27,9 +27,6 @@ const buildParams = (order) => {
             'Date': {
                 S: `${order.date}`,
             },
-            'Items': {
-                L: order.items,
-            }
         },
         TableName: tableName,
     };
