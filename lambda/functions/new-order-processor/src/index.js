@@ -19,6 +19,6 @@ exports.handler = async function(event) {
         ],
     };
 
-    orderService.enrichOrder(orderData);
-    await snsService.publishNotification();
+    const enrichedOrderData = orderService.enrichOrder(orderData);
+    await snsService.publishNotification(enrichedOrderData);
 };
