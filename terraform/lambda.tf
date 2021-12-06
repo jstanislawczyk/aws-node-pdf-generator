@@ -27,6 +27,7 @@ resource "aws_lambda_function" "pdf_generator" {
   environment {
     variables = {
       BUCKET_NAME = aws_s3_bucket.order_pdf_lake.id
+      IS_LAMBDA   = true
     }
   }
 }
