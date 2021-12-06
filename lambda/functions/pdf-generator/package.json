@@ -10,7 +10,6 @@
   "author": "jstanislawczyk",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.1036.0",
     "pdfkit": "^0.13.0",
     "uuid": "^8.3.2"
   }
