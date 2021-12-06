@@ -1,23 +1,20 @@
 const AWS = require('aws-sdk');
 
-exports.savePdf = async (pdfName) => {
+exports.savePdf = async (pdf) => {
     const s3 = new AWS.S3();
-    const params = buildParams(pdfName);
+    const params = buildParams(pdf);
 
     await s3.upload(params).promise();
-    console.log(`PDF saved: ${JSON.stringify(params)}`);
+    console.log(`PDF saved: ${pdf.name}`);
 };
 
-const buildParams = (pdfName) => {
+const buildParams = (pdf) => {
     const bucketName = process.env.BUCKET_NAME;
-    const pdfPath = process.env.IS_LAMBDA === 'true'
-        ? `/tmp/${pdfName}`
-        : `../../${pdfName}`;
 
     return {
-        Body: pdfPath,
+        Body: pdf.documentStream,
         Bucket: bucketName,
-        Key: `${pdfName}`,
+        Key: pdf.name,
         ContentType : 'application/pdf',
     };
 };

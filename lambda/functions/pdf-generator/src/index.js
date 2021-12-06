@@ -7,7 +7,7 @@ exports.handler = async function(event) {
 
     console.log(`Order data received: ${JSON.stringify(orderData)}`)
 
-    const pdfName = await pdfGenerator.generatePdf(orderData);
+    const pdf = pdfGenerator.generatePdf(orderData);
 
-    await s3Service.savePdf(pdfName);
+    await s3Service.savePdf(pdf);
 };

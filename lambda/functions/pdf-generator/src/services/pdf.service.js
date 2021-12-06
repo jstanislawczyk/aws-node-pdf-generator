@@ -2,33 +2,25 @@ const fs = require('fs');
 const uuid = require('uuid');
 const PDFDocument = require('pdfkit');
 
-exports.generatePdf = async (orderData) => {
-    return new Promise((resolve, reject) => {
-        const pdfDocument = new PDFDocument({ size: 'A4' });
-        const pdfName = buildPDFName(orderData);
-        const pdfPath = process.env.IS_LAMBDA === 'true'
-            ? `/tmp/${pdfName}`
-            : pdfName;
-        const writeStream = fs.createWriteStream(pdfPath);
+exports.generatePdf = (orderData) => {
+    const pdfDocument = new PDFDocument({ size: 'A4' });
+    const pdfName = buildPDFName(orderData);
+    const writeStream = fs.createWriteStream(pdfName);
 
-        console.log(`Generating PDF with name=${pdfName}`);
+    console.log(`Generating PDF with name=${pdfName}`);
 
-        writeStream.on('finish', () => {
-            console.log(`PDF ${pdfName} generated`);
-            resolve(pdfName);
-        });
+    pdfDocument.pipe(writeStream);
+    buildTitle(pdfDocument);
+    buildCustomerInfo(pdfDocument, orderData);
+    buildOrderItemsTable(pdfDocument, orderData.items);
+    pdfDocument.end();
 
-        writeStream.on('error', (error) => {
-            console.log(`PDF generating error: ${error.message}`)
-            reject(error);
-        });
+    console.log(`Generated ${pdfName} PDF`);
 
-        pdfDocument.pipe(writeStream);
-        buildTitle(pdfDocument);
-        buildCustomerInfo(pdfDocument, orderData);
-        buildOrderItemsTable(pdfDocument, orderData.items);
-        pdfDocument.end();
-    });
+    return {
+        name: pdfName,
+        documentStream: pdfDocument,
+    }
 };
 
 const buildPDFName = (orderData) => {
