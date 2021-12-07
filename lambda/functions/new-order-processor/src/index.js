@@ -3,24 +3,14 @@ const dynamodbService = require('./services/dynamodb.service');
 const snsService = require('./services/sns.service');
 
 exports.handler = async function(event) {
-    const orderData = {
-        firstName: 'TestName',
-        lastName: 'TestLastName',
-        items: [
-            {
-                name: 'Test1',
-                quantity: 11,
-                price: 10.0,
-            },
-            {
-                name: 'Test2',
-                quantity: 3,
-                price: 5.0,
-            },
-        ],
-    };
-
+    const orderData = JSON.parse(event.body);
     const enrichedOrderData = orderService.enrichOrder(orderData);
+
     await dynamodbService.saveOrder(enrichedOrderData);
     await snsService.publishNotification(enrichedOrderData);
+
+    return {
+        statusCode: 200,
+        body: JSON.stringify(enrichedOrderData),
+    };
 };

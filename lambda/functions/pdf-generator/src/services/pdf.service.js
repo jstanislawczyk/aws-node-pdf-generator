@@ -48,9 +48,9 @@ const buildCustomerInfo = (pdfDocument, orderData) => {
     pdfDocument
         .fontSize(12)
         .font('Helvetica')
-        .text(`Firstname: ${orderData.firstName}`);
+        .text(`First name: ${orderData.firstName}`);
     pdfDocument
-        .text(`Lastname: ${orderData.firstName}`);
+        .text(`Last name: ${orderData.firstName}`);
     pdfDocument.moveDown();
 
     pdfDocument
