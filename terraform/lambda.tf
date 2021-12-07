@@ -39,3 +39,11 @@ resource "aws_lambda_event_source_mapping" "pdf_generator_sqs_mapping" {
   function_name    = aws_lambda_function.pdf_generator.arn
   batch_size       = 1
 }
+
+resource "aws_lambda_permission" "new_order_api_gateway_permission" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.new_order_processor.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_api_gateway_rest_api.order_api.execution_arn}/*/*"
+}
