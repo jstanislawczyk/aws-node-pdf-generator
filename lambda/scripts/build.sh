@@ -11,7 +11,7 @@ for directory in * ; do
     echo ""
 
     cd $directory
-    npm install
+    npm install --only=prod
     zip -r $directory.zip ./*
     mv ./$directory.zip ../../../terraform
     cd ../

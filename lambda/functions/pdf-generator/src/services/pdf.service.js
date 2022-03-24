@@ -1,6 +1,7 @@
 const fs = require('fs');
 const uuid = require('uuid');
 const PDFDocument = require('pdfkit');
+const qrImage = require('qr-image');
 
 exports.generatePdf = (orderData) => {
     const pdfDocument = new PDFDocument({ size: 'A4' });
@@ -11,6 +12,7 @@ exports.generatePdf = (orderData) => {
 
     pdfDocument.pipe(writeStream);
     buildTitle(pdfDocument);
+    buildQrCode(pdfDocument, orderData);
     buildCustomerInfo(pdfDocument, orderData);
     buildOrderItemsTable(pdfDocument, orderData.items);
     pdfDocument.end();
@@ -27,6 +29,19 @@ const buildPDFName = (orderData) => {
     const currentDate = new Date().toISOString().split('T')[0];
 
     return `${orderData.firstName}-${orderData.lastName}-${currentDate}-${uuid.v4()}.pdf`;
+};
+
+const buildQrCode = (pdfDocument, orderData) => {
+    const dataString = JSON.stringify({
+        name: orderData.firstName,
+        lastName: orderData.lastName,
+    });
+    const qrCode = qrImage.imageSync(dataString);
+
+    pdfDocument
+        .image(qrCode, 420, 110, {
+            width: 100,
+        });
 };
 
 const buildTitle = (pdfDocument) => {

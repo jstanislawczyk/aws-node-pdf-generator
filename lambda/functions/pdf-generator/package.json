@@ -11,6 +11,10 @@
   "license": "ISC",
   "dependencies": {
     "pdfkit": "^0.13.0",
+    "qr-image": "^3.2.0",
     "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.1099.0"
   }
 }
